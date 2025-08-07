@@ -9,6 +9,9 @@ public record ProductRequestDTO (
     String name,
 
     @NotNull
-    Integer price
+    Integer price,
+
+    @NotNull
+    Integer quantity
 ) {
 }
