@@ -9,7 +9,7 @@ public record ProductRequestDTO (
     String name,
 
     @NotNull
-    Integer price,
+    Double price,
 
     @NotNull
     Integer quantity

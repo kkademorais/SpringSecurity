@@ -23,7 +23,7 @@ public class ProductService {
         // Serviço para POST
     public void addProduct(@RequestBody @Valid ProductRequestDTO body){
         Product product = new Product(body);
-        product.setCost(product.getPrice() * product.getQuantity().doubleValue());
+        product.setCost(product.getPrice() * product.getQuantity());
         this.repository.save(product);
     }
 
