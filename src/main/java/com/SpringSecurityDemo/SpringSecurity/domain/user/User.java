@@ -32,6 +32,13 @@ public class User implements UserDetails {
         if(data.role() == UserRole.ADMIN){this.role = UserRole.ADMIN;}
     }
 
+    public User(RegisterDTO data){
+        this.login = data.login();
+        this.password = data.password();
+        this.role = data.role();
+    }
+
+
     @Override
     public String toString() {
         return "User{" +
