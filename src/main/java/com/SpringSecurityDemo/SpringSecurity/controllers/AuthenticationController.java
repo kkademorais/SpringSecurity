@@ -1,10 +1,11 @@
 package com.SpringSecurityDemo.SpringSecurity.controllers;
 
-import com.SpringSecurityDemo.SpringSecurity.domain.user.RegisterDTO;
+import com.SpringSecurityDemo.SpringSecurity.domain.user.RegisterRequestDTO;
 import com.SpringSecurityDemo.SpringSecurity.domain.user.User;
 import com.SpringSecurityDemo.SpringSecurity.domain.user.UserRequestDTO;
 import com.SpringSecurityDemo.SpringSecurity.services.AuthorizationService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
+    @Autowired
     private final AuthenticationManager authenticationManager;
     private final AuthorizationService authorizationService;
 
@@ -30,18 +32,22 @@ public class AuthenticationController {
     @PostMapping("/login") // Endpoint de POST
     public ResponseEntity login(@RequestBody @Valid UserRequestDTO data){
          UsernamePasswordAuthenticationToken usernamePasswordHash = new UsernamePasswordAuthenticationToken(data.login(), data.password()); // Transforma credenciais em token que passou por Hash
-         this.authenticationManager.authenticate(usernamePasswordHash); // Validação do token
+         var auth = this.authenticationManager.authenticate(usernamePasswordHash); // Validação do token
          return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO registerDTO){
-        if(authorizationService.getUserRepository().findByLogin(registerDTO.login()) != null){return ResponseEntity.badRequest().build();}
+    public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO data){
+        if(authorizationService.getUserRepository().findByLogin(data.login()) != null){return ResponseEntity.badRequest().build();}
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
-        User newUser = new User(registerDTO.login(), encryptedPassword, registerDTO.role());
+        User newUser = new User(data.login(), encryptedPassword, data.userRole());
 
+        //Salvar no Repository por meio do Service
+        this.authorizationService.addUser(newUser);
+
+        return ResponseEntity.ok().build();
     }
 
 }

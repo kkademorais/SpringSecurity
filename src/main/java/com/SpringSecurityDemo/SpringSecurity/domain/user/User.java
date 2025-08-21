@@ -25,17 +25,11 @@ public class User implements UserDetails {
     public void setLogin(String login) {this.login = login;}
     public void setPassword(String password) {this.password = password;}
 
-    public User(UserRequestDTO data){
-        this.login = data.login();
-        this.password = data.password();
-        if(data.role() == UserRole.USER){this.role = UserRole.USER;};
-        if(data.role() == UserRole.ADMIN){this.role = UserRole.ADMIN;}
-    }
 
-    public User(RegisterDTO data){
-        this.login = data.login();
-        this.password = data.password();
-        this.role = data.role();
+    public User(String login, String password, UserRole userRole){
+        this.login = login;
+        this.password = password;
+        this.role = userRole;
     }
 
 

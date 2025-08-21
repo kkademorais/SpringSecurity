@@ -1,10 +1,13 @@
 package com.SpringSecurityDemo.SpringSecurity.services;
 
+import com.SpringSecurityDemo.SpringSecurity.domain.user.User;
 import com.SpringSecurityDemo.SpringSecurity.repositories.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class AuthorizationService implements UserDetailsService {
@@ -17,6 +20,8 @@ public class AuthorizationService implements UserDetailsService {
 
     public UserRepository getUserRepository() {return userRepository;}
 
+        //POST: Salva novo user no BD -> /register
+    public void addUser(User user){this.userRepository.save(user);}
 
     //Implementa serviço de busca do usuário
     @Override
